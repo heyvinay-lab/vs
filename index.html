@@ -3,210 +3,167 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Offline Location</title>
+<title>Accurate Offline Location</title>
 
 <style>
-    * {
-        box-sizing: border-box;
-    }
-
-    body {
-        margin: 0;
-        min-height: 100vh;
-        font-family: Arial, Helvetica, sans-serif;
-        background: #f4f7fb;
-        color: #172033;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        padding: 20px;
-    }
-
-    .container {
-        width: 100%;
-        max-width: 430px;
-    }
-
-    .card {
-        background: white;
-        border-radius: 24px;
-        padding: 28px;
-
-        box-shadow:
-            0 15px 45px rgba(0, 0, 0, 0.10);
-    }
-
-    .location-icon {
-        width: 64px;
-        height: 64px;
-
-        border-radius: 18px;
-
-        background: #e7f0ff;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        font-size: 32px;
-
-        margin-bottom: 20px;
-    }
-
-    h1 {
-        margin: 0;
-
-        font-size: 28px;
-        font-weight: 700;
-    }
-
-    .description {
-        margin-top: 10px;
-        margin-bottom: 25px;
-
-        color: #6b7585;
-
-        font-size: 16px;
-        line-height: 1.5;
-    }
-
-    .capture-button {
-        width: 100%;
-
-        border: none;
-        border-radius: 14px;
-
-        padding: 16px;
-
-        background: #1769e0;
-        color: white;
-
-        font-size: 17px;
-        font-weight: bold;
-
-        cursor: pointer;
-
-        transition: 0.2s;
-    }
-
-    .capture-button:active {
-        transform: scale(0.98);
-    }
-
-    .capture-button:disabled {
-        background: #8aaee5;
-        cursor: wait;
-    }
-
-    .status {
-        margin-top: 18px;
-
-        padding: 15px;
-
-        border-radius: 13px;
-
-        background: #f1f4f8;
-
-        color: #566173;
-
-        font-size: 14px;
-
-        line-height: 1.4;
-    }
-
-    .status.success {
-        background: #eaf8ef;
-        color: #227344;
-    }
-
-    .status.error {
-        background: #fff0f0;
-        color: #b3261e;
-    }
-
-    .location-data {
-        display: none;
-
-        margin-top: 20px;
-
-        border: 1px solid #e5e9ef;
-
-        border-radius: 16px;
-
-        overflow: hidden;
-    }
-
-    .data-row {
-        display: flex;
-
-        justify-content: space-between;
-
-        gap: 15px;
-
-        padding: 14px 16px;
-
-        border-bottom: 1px solid #edf0f4;
-    }
-
-    .data-row:last-child {
-        border-bottom: none;
-    }
-
-    .data-label {
-        color: #7a8494;
-        font-size: 14px;
-    }
-
-    .data-value {
-        font-size: 14px;
-        font-weight: 600;
-
-        text-align: right;
-
-        word-break: break-word;
-    }
-
-    .saved-count {
-        margin-top: 18px;
-
-        text-align: center;
-
-        color: #697486;
-
-        font-size: 13px;
-    }
-
-    .offline-badge {
-        display: inline-flex;
-
-        align-items: center;
-
-        gap: 6px;
-
-        margin-bottom: 18px;
-
-        padding: 6px 10px;
-
-        border-radius: 20px;
-
-        background: #f1f4f8;
-
-        color: #667184;
-
-        font-size: 12px;
-    }
-
-    .dot {
-        width: 7px;
-        height: 7px;
-
-        border-radius: 50%;
-
-        background: #35a853;
-    }
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background: #f4f7fb;
+    color: #172033;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 440px;
+}
+
+.card {
+    background: white;
+    border-radius: 24px;
+    padding: 28px;
+    box-shadow: 0 15px 45px rgba(0,0,0,.10);
+}
+
+.icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    background: #e8f1ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+    margin-bottom: 18px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 27px;
+}
+
+.subtitle {
+    color: #6c7788;
+    line-height: 1.5;
+    margin: 10px 0 22px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 7px 11px;
+    border-radius: 20px;
+    background: #eef3f8;
+    color: #657184;
+    font-size: 12px;
+    margin-bottom: 18px;
+}
+
+button {
+    width: 100%;
+    border: 0;
+    border-radius: 14px;
+    padding: 16px;
+    background: #1769e0;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:disabled {
+    opacity: .65;
+    cursor: wait;
+}
+
+.status {
+    margin-top: 18px;
+    padding: 15px;
+    border-radius: 13px;
+    background: #f1f4f8;
+    color: #566173;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.status.success {
+    background: #eaf8ef;
+    color: #227344;
+}
+
+.status.error {
+    background: #fff0f0;
+    color: #b3261e;
+}
+
+.location-box {
+    display: none;
+    margin-top: 20px;
+    border: 1px solid #e4e9f0;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 14px 16px;
+    border-bottom: 1px solid #edf0f4;
+}
+
+.row:last-child {
+    border-bottom: 0;
+}
+
+.label {
+    color: #788395;
+    font-size: 14px;
+}
+
+.value {
+    font-size: 14px;
+    font-weight: 600;
+    text-align: right;
+    word-break: break-word;
+}
+
+.accuracy-good {
+    color: #16833a;
+}
+
+.accuracy-medium {
+    color: #b26a00;
+}
+
+.accuracy-poor {
+    color: #c62828;
+}
+
+.saved {
+    text-align: center;
+    color: #6c7788;
+    font-size: 13px;
+    margin-top: 18px;
+}
+
+.note {
+    margin-top: 18px;
+    padding: 12px;
+    border-radius: 10px;
+    background: #f7f8fa;
+    color: #687386;
+    font-size: 12px;
+    line-height: 1.5;
+}
 </style>
 </head>
 
@@ -214,391 +171,618 @@
 
 <div class="container">
 
-    <div class="card">
+<div class="card">
 
-        <div class="location-icon">
-            📍
+    <div class="icon">📍</div>
+
+    <div class="badge">
+        ● Offline storage enabled
+    </div>
+
+    <h1>Accurate Location</h1>
+
+    <p class="subtitle">
+        Tap below to find your best available GPS location.
+        The phone can save the result even without mobile data.
+    </p>
+
+    <button
+        id="locationButton"
+        onclick="startLocation()">
+        Get My Location
+    </button>
+
+    <div
+        id="status"
+        class="status">
+        Ready to find your location.
+    </div>
+
+    <div
+        id="locationBox"
+        class="location-box">
+
+        <div class="row">
+            <span class="label">Latitude</span>
+            <span
+                id="latitude"
+                class="value">
+                —
+            </span>
         </div>
 
-        <div class="offline-badge">
-            <span class="dot"></span>
-            Offline storage enabled
+        <div class="row">
+            <span class="label">Longitude</span>
+            <span
+                id="longitude"
+                class="value">
+                —
+            </span>
         </div>
 
-        <h1>
-            Get My Location
-        </h1>
-
-        <p class="description">
-            Tap the button to capture your current location.
-            Your coordinates are stored on this device and do not
-            require mobile data.
-        </p>
-
-        <button
-            id="captureButton"
-            class="capture-button"
-            onclick="captureLocation()"
-        >
-            Capture My Location
-        </button>
-
-        <div
-            id="status"
-            class="status"
-        >
-            Ready to capture your location.
+        <div class="row">
+            <span class="label">Accuracy</span>
+            <span
+                id="accuracy"
+                class="value">
+                —
+            </span>
         </div>
 
-        <div
-            id="locationData"
-            class="location-data"
-        >
-
-            <div class="data-row">
-                <span class="data-label">
-                    Latitude
-                </span>
-
-                <span
-                    id="latitude"
-                    class="data-value"
-                >
-                    —
-                </span>
-            </div>
-
-
-            <div class="data-row">
-                <span class="data-label">
-                    Longitude
-                </span>
-
-                <span
-                    id="longitude"
-                    class="data-value"
-                >
-                    —
-                </span>
-            </div>
-
-
-            <div class="data-row">
-                <span class="data-label">
-                    Accuracy
-                </span>
-
-                <span
-                    id="accuracy"
-                    class="data-value"
-                >
-                    —
-                </span>
-            </div>
-
-
-            <div class="data-row">
-                <span class="data-label">
-                    Time
-                </span>
-
-                <span
-                    id="timestamp"
-                    class="data-value"
-                >
-                    —
-                </span>
-            </div>
-
+        <div class="row">
+            <span class="label">Altitude</span>
+            <span
+                id="altitude"
+                class="value">
+                —
+            </span>
         </div>
 
-
-        <div
-            id="savedCount"
-            class="saved-count"
-        >
-            0 location(s) stored on this device
+        <div class="row">
+            <span class="label">Captured</span>
+            <span
+                id="time"
+                class="value">
+                —
+            </span>
         </div>
 
     </div>
+
+    <div
+        id="saved"
+        class="saved">
+        0 location(s) stored locally
+    </div>
+
+    <div class="note">
+        For best accuracy, keep Location/GPS enabled and use the
+        website over HTTPS. Being outdoors or near a window can
+        improve GPS reception.
+    </div>
+
+</div>
 
 </div>
 
 
 <script>
 
-    /*
-     * Update number of locations stored locally
-     */
-    function updateSavedCount() {
+let watchId = null;
 
-        const locations =
-            JSON.parse(
-                localStorage.getItem("offlineLocations") || "[]"
-            );
+let bestLocation = null;
 
-        document.getElementById("savedCount").textContent =
-            locations.length +
-            " location(s) stored on this device";
-    }
+let bestAccuracy = Infinity;
 
+let searchTimer = null;
 
-    /*
-     * Capture location
-     */
-    function captureLocation() {
 
-        const button =
-            document.getElementById("captureButton");
+/* -----------------------------
+   Saved location counter
+----------------------------- */
 
-        const status =
-            document.getElementById("status");
+function updateSavedCount() {
 
-
-        /*
-         * Check browser support
-         */
-        if (!navigator.geolocation) {
-
-            status.textContent =
-                "Your browser does not support GPS location.";
-
-            status.className =
-                "status error";
-
-            return;
-        }
-
-
-        /*
-         * UI while getting location
-         */
-        button.disabled = true;
-
-        button.textContent =
-            "Getting Location...";
-
-        status.textContent =
-            "Waiting for the most accurate location available...";
-
-        status.className =
-            "status";
-
-
-        /*
-         * Ask phone for location
-         */
-        navigator.geolocation.getCurrentPosition(
-
-            function(position) {
-
-                const latitude =
-                    position.coords.latitude;
-
-                const longitude =
-                    position.coords.longitude;
-
-                const accuracy =
-                    position.coords.accuracy;
-
-                const timestamp =
-                    new Date().toISOString();
-
-
-                /*
-                 * Create location object
-                 */
-                const location = {
-
-                    latitude: latitude,
-
-                    longitude: longitude,
-
-                    accuracy: accuracy,
-
-                    timestamp: timestamp
-
-                };
-
-
-                /*
-                 * Read previously stored locations
-                 */
-                const locations =
-                    JSON.parse(
-                        localStorage.getItem(
-                            "offlineLocations"
-                        ) || "[]"
-                    );
-
-
-                /*
-                 * Add new location
-                 */
-                locations.push(location);
-
-
-                /*
-                 * Save locally
-                 */
-                localStorage.setItem(
-                    "offlineLocations",
-                    JSON.stringify(locations)
-                );
-
-
-                /*
-                 * Display location
-                 */
-                document.getElementById(
-                    "latitude"
-                ).textContent =
-                    latitude.toFixed(7);
-
-
-                document.getElementById(
-                    "longitude"
-                ).textContent =
-                    longitude.toFixed(7);
-
-
-                document.getElementById(
-                    "accuracy"
-                ).textContent =
-                    accuracy.toFixed(1) +
-                    " meters";
-
-
-                document.getElementById(
-                    "timestamp"
-                ).textContent =
-                    new Date(timestamp)
-                    .toLocaleString();
-
-
-                /*
-                 * Show location card
-                 */
-                document.getElementById(
-                    "locationData"
-                ).style.display = "block";
-
-
-                /*
-                 * Success message
-                 */
-                status.textContent =
-                    "Location captured and saved on this device.";
-
-                status.className =
-                    "status success";
-
-
-                /*
-                 * Reset button
-                 */
-                button.disabled = false;
-
-                button.textContent =
-                    "Capture My Location";
-
-
-                /*
-                 * Update count
-                 */
-                updateSavedCount();
-
-            },
-
-
-            /*
-             * Error
-             */
-            function(error) {
-
-                let message;
-
-
-                switch (error.code) {
-
-                    case error.PERMISSION_DENIED:
-
-                        message =
-                            "Location permission was denied. Please allow location access in your browser settings.";
-
-                        break;
-
-
-                    case error.POSITION_UNAVAILABLE:
-
-                        message =
-                            "Location is currently unavailable. Try moving to an area with a better GPS signal.";
-
-                        break;
-
-
-                    case error.TIMEOUT:
-
-                        message =
-                            "Location request timed out. Please try again.";
-
-                        break;
-
-
-                    default:
-
-                        message =
-                            "Unable to determine your location.";
-
-                }
-
-
-                status.textContent =
-                    message;
-
-                status.className =
-                    "status error";
-
-
-                button.disabled = false;
-
-                button.textContent =
-                    "Try Again";
-
-            },
-
-
-            /*
-             * Location options
-             */
-            {
-
-                /*
-                 * Ask for GPS/high accuracy
-                 */
-                enableHighAccuracy: true,
-
-                /*
-                 * Wait up to 30 seconds
-                 */
-                timeout: 30000,
-
-                /*
-                 * Don't use an old cached position
-                 */
-                maximumAge: 0
-
-            }
-
+    const locations =
+        JSON.parse(
+            localStorage.getItem("offlineLocations") || "[]"
         );
 
+    document.getElementById("saved").textContent =
+        locations.length +
+        " location(s) stored locally";
+}
+
+
+/* -----------------------------
+   Start GPS search
+----------------------------- */
+
+function startLocation() {
+
+    if (!navigator.geolocation) {
+
+        showError(
+            "Your browser does not support location services."
+        );
+
+        return;
+    }
+
+
+    bestLocation = null;
+
+    bestAccuracy = Infinity;
+
+
+    const button =
+        document.getElementById("locationButton");
+
+    const status =
+        document.getElementById("status");
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "Searching GPS...";
+
+
+    status.className = "status";
+
+    status.textContent =
+        "Searching for the most accurate GPS signal...";
+
+
+    document.getElementById(
+        "locationBox"
+    ).style.display = "block";
+
+
+    /*
+     * Start continuous GPS updates
+     */
+
+    watchId =
+        navigator.geolocation.watchPosition(
+
+            locationReceived,
+
+            locationError,
+
+            {
+                enableHighAccuracy: true,
+
+                maximumAge: 0,
+
+                timeout: 60000
+            }
+        );
+
+
+    /*
+     * Don't search forever.
+     * After 60 seconds save the best result.
+     */
+
+    searchTimer =
+        setTimeout(
+            finishLocation,
+            60000
+        );
+}
+
+
+/* -----------------------------
+   GPS result received
+----------------------------- */
+
+function locationReceived(position) {
+
+    const coords =
+        position.coords;
+
+
+    const accuracy =
+        coords.accuracy;
+
+
+    /*
+     * Only accept a better reading
+     */
+
+    if (
+        bestLocation === null ||
+        accuracy < bestAccuracy
+    ) {
+
+        bestAccuracy = accuracy;
+
+
+        bestLocation = {
+
+            latitude:
+                coords.latitude,
+
+            longitude:
+                coords.longitude,
+
+            accuracy:
+                accuracy,
+
+            altitude:
+                coords.altitude,
+
+            altitudeAccuracy:
+                coords.altitudeAccuracy,
+
+            heading:
+                coords.heading,
+
+            speed:
+                coords.speed,
+
+            timestamp:
+                new Date().toISOString()
+        };
+
+
+        displayLocation(
+            bestLocation
+        );
+
+
+        updateStatus(
+            accuracy
+        );
+
+
+        /*
+         * If GPS reaches 10 meters
+         * or better, finish.
+         */
+
+        if (accuracy <= 10) {
+
+            finishLocation();
+        }
+    }
+}
+
+
+/* -----------------------------
+   Display GPS data
+----------------------------- */
+
+function displayLocation(location) {
+
+    document.getElementById(
+        "latitude"
+    ).textContent =
+        location.latitude.toFixed(7);
+
+
+    document.getElementById(
+        "longitude"
+    ).textContent =
+        location.longitude.toFixed(7);
+
+
+    /*
+     * Accuracy
+     */
+
+    const accuracyElement =
+        document.getElementById(
+            "accuracy"
+        );
+
+
+    accuracyElement.textContent =
+        location.accuracy.toFixed(1) +
+        " meters";
+
+
+    accuracyElement.className =
+        "value";
+
+
+    if (location.accuracy <= 10) {
+
+        accuracyElement.classList.add(
+            "accuracy-good"
+        );
+
+    } else if (location.accuracy <= 30) {
+
+        accuracyElement.classList.add(
+            "accuracy-medium"
+        );
+
+    } else {
+
+        accuracyElement.classList.add(
+            "accuracy-poor"
+        );
     }
 
 
     /*
-     * Show saved locations count when page loads
+     * Altitude
      */
+
+    if (
+        location.altitude !== null &&
+        location.altitude !== undefined
+    ) {
+
+        document.getElementById(
+            "altitude"
+        ).textContent =
+            location.altitude.toFixed(1) +
+            " m";
+
+    } else {
+
+        document.getElementById(
+            "altitude"
+        ).textContent =
+            "Not available";
+    }
+
+
+    /*
+     * Time
+     */
+
+    document.getElementById(
+        "time"
+    ).textContent =
+        new Date(
+            location.timestamp
+        ).toLocaleString();
+}
+
+
+/* -----------------------------
+   Status while searching
+----------------------------- */
+
+function updateStatus(accuracy) {
+
+    const status =
+        document.getElementById(
+            "status"
+        );
+
+
+    if (accuracy <= 10) {
+
+        status.textContent =
+            "Excellent GPS accuracy: " +
+            accuracy.toFixed(1) +
+            " meters";
+
+    } else if (accuracy <= 30) {
+
+        status.textContent =
+            "Good GPS accuracy: " +
+            accuracy.toFixed(1) +
+            " meters. Searching for better...";
+
+    } else {
+
+        status.textContent =
+            "Current accuracy: " +
+            accuracy.toFixed(1) +
+            " meters. Waiting for a better GPS fix...";
+    }
+}
+
+
+/* -----------------------------
+   Finish and save
+----------------------------- */
+
+function finishLocation() {
+
+    /*
+     * Stop timer
+     */
+
+    if (searchTimer !== null) {
+
+        clearTimeout(
+            searchTimer
+        );
+
+        searchTimer = null;
+    }
+
+
+    /*
+     * Stop GPS watcher
+     */
+
+    if (watchId !== null) {
+
+        navigator.geolocation.clearWatch(
+            watchId
+        );
+
+        watchId = null;
+    }
+
+
+    const button =
+        document.getElementById(
+            "locationButton"
+        );
+
+    const status =
+        document.getElementById(
+            "status"
+        );
+
+
+    /*
+     * No location found
+     */
+
+    if (!bestLocation) {
+
+        showError(
+            "No GPS location was received. Make sure Location is ON and try again."
+        );
+
+        return;
+    }
+
+
+    /*
+     * Get stored locations
+     */
+
+    const locations =
+        JSON.parse(
+            localStorage.getItem(
+                "offlineLocations"
+            ) || "[]"
+        );
+
+
+    /*
+     * Save best location
+     */
+
+    locations.push(
+        bestLocation
+    );
+
+
+    localStorage.setItem(
+        "offlineLocations",
+        JSON.stringify(
+            locations
+        )
+    );
+
+
+    /*
+     * Success UI
+     */
+
+    status.className =
+        "status success";
+
+
+    status.textContent =
+        "Location saved successfully. Best accuracy: " +
+        bestLocation.accuracy.toFixed(1) +
+        " meters";
+
+
+    button.disabled = false;
+
+    button.textContent =
+        "Get Location Again";
+
+
     updateSavedCount();
+}
+
+
+/* -----------------------------
+   GPS errors
+----------------------------- */
+
+function locationError(error) {
+
+    if (error.code === 1) {
+
+        showError(
+            "Location permission denied. Allow location permission for this website."
+        );
+
+    } else if (error.code === 2) {
+
+        showError(
+            "Location unavailable. Make sure phone Location/GPS is ON."
+        );
+
+    } else if (error.code === 3) {
+
+        /*
+         * Don't immediately fail on timeout.
+         * watchPosition may provide another reading.
+         */
+
+        document.getElementById(
+            "status"
+        ).textContent =
+            "GPS is taking longer than expected. Searching...";
+    }
+}
+
+
+/* -----------------------------
+   General error
+----------------------------- */
+
+function showError(message) {
+
+    if (watchId !== null) {
+
+        navigator.geolocation.clearWatch(
+            watchId
+        );
+
+        watchId = null;
+    }
+
+
+    if (searchTimer !== null) {
+
+        clearTimeout(
+            searchTimer
+        );
+
+        searchTimer = null;
+    }
+
+
+    const status =
+        document.getElementById(
+            "status"
+        );
+
+
+    const button =
+        document.getElementById(
+            "locationButton"
+        );
+
+
+    status.className =
+        "status error";
+
+
+    status.textContent =
+        message;
+
+
+    button.disabled = false;
+
+    button.textContent =
+        "Try Again";
+}
+
+
+/* -----------------------------
+   Initial count
+----------------------------- */
+
+updateSavedCount();
 
 </script>
 
