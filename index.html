@@ -1,606 +1,276 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Accurate Offline Location</title>
-
-<style>
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    min-height: 100vh;
-    font-family: Arial, sans-serif;
-    background: #f4f7fb;
-    color: #172033;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
-
-.container {
-    width: 100%;
-    max-width: 440px;
-}
-
-.card {
-    background: white;
-    border-radius: 24px;
-    padding: 28px;
-    box-shadow: 0 15px 45px rgba(0,0,0,.10);
-}
-
-.icon {
-    width: 64px;
-    height: 64px;
-    border-radius: 18px;
-    background: #e8f1ff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 32px;
-    margin-bottom: 18px;
-}
-
-h1 {
-    margin: 0;
-    font-size: 27px;
-}
-
-.subtitle {
-    color: #6c7788;
-    line-height: 1.5;
-    margin: 10px 0 22px;
-}
-
-.badge {
-    display: inline-block;
-    padding: 7px 11px;
-    border-radius: 20px;
-    background: #eef3f8;
-    color: #657184;
-    font-size: 12px;
-    margin-bottom: 18px;
-}
-
-button {
-    width: 100%;
-    border: 0;
-    border-radius: 14px;
-    padding: 16px;
-    background: #1769e0;
-    color: white;
-    font-size: 17px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-button:disabled {
-    opacity: .65;
-    cursor: wait;
-}
-
-.status {
-    margin-top: 18px;
-    padding: 15px;
-    border-radius: 13px;
-    background: #f1f4f8;
-    color: #566173;
-    font-size: 14px;
-    line-height: 1.5;
-}
-
-.status.success {
-    background: #eaf8ef;
-    color: #227344;
-}
-
-.status.error {
-    background: #fff0f0;
-    color: #b3261e;
-}
-
-.location-box {
-    display: none;
-    margin-top: 20px;
-    border: 1px solid #e4e9f0;
-    border-radius: 16px;
-    overflow: hidden;
-}
-
-.row {
-    display: flex;
-    justify-content: space-between;
-    gap: 15px;
-    padding: 14px 16px;
-    border-bottom: 1px solid #edf0f4;
-}
-
-.row:last-child {
-    border-bottom: 0;
-}
-
-.label {
-    color: #788395;
-    font-size: 14px;
-}
-
-.value {
-    font-size: 14px;
-    font-weight: 600;
-    text-align: right;
-    word-break: break-word;
-}
-
-.accuracy-good {
-    color: #16833a;
-}
-
-.accuracy-medium {
-    color: #b26a00;
-}
-
-.accuracy-poor {
-    color: #c62828;
-}
-
-.saved {
-    text-align: center;
-    color: #6c7788;
-    font-size: 13px;
-    margin-top: 18px;
-}
-
-.note {
-    margin-top: 18px;
-    padding: 12px;
-    border-radius: 10px;
-    background: #f7f8fa;
-    color: #687386;
-    font-size: 12px;
-    line-height: 1.5;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Full-Stack & CS Mastery Quiz</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
 
-<body>
+    <!-- Header -->
+    <header class="border-b border-slate-800 bg-slate-900/60 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 font-bold text-xl">
+                    ⚡
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg tracking-tight text-white">Full-Stack & CS 50-Q Master Quiz</h1>
+                    <p class="text-xs text-slate-400">Java, DSA, OOP, Web, React, SQL, PHP, Angular & More</p>
+                </div>
+            </div>
+            <div id="score-badge" class="hidden items-center space-x-2 bg-slate-800 px-3 py-1.5 rounded-full border border-slate-700 text-sm font-medium">
+                <span class="text-indigo-400">Score:</span>
+                <span id="current-score" class="text-white">0</span>/<span id="total-score">50</span>
+            </div>
+        </div>
+    </header>
 
-<div class="container">
+    <!-- Main Container -->
+    <main class="max-w-3xl w-full mx-auto px-4 py-8 flex-grow flex flex-col justify-center">
 
-<div class="card">
-
-    <div class="icon">📍</div>
-
-    <div class="badge">
-        ● Offline storage enabled
-    </div>
-
-    <h1>Accurate Location</h1>
-
-    <p class="subtitle">
-        Tap below to find your best available GPS location.
-        The phone can save the result even without mobile data.
-    </p>
-
-    <button
-        id="locationButton"
-        onclick="startLocation()">
-        Get My Location
-    </button>
-
-    <div
-        id="status"
-        class="status">
-        Ready to find your location.
-    </div>
-
-    <div
-        id="locationBox"
-        class="location-box">
-
-        <div class="row">
-            <span class="label">Latitude</span>
-            <span
-                id="latitude"
-                class="value">
-                —
-            </span>
+        <!-- Welcome View -->
+        <div id="welcome-view" class="bg-slate-900/80 border border-slate-800 rounded-2xl p-8 shadow-2xl text-center space-y-6">
+            <div class="inline-flex p-4 bg-indigo-500/10 text-indigo-400 rounded-2xl text-4xl mb-2">
+                🚀
+            </div>
+            <div class="space-y-2">
+                <h2 class="text-2xl sm:text-3xl font-bold text-white">Ready for the Ultimate Challenge?</h2>
+                <p class="text-slate-400 max-w-lg mx-auto text-sm sm:text-base">
+                    Test your expertise across 50 rigorous questions spanning Java, Data Structures & Algorithms, React, SQL, PHP, Angular, Drupal, and Server Administration.
+                </p>
+            </div>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-left py-4 text-xs text-slate-300">
+                <div class="bg-slate-800/60 p-3 rounded-xl border border-slate-700/50">
+                    <span class="block font-semibold text-indigo-400 mb-1">Java & OOP</span> Loops, Strings, Classes
+                </div>
+                <div class="bg-slate-800/60 p-3 rounded-xl border border-slate-700/50">
+                    <span class="block font-semibold text-indigo-400 mb-1">DSA & Logic</span> Arrays, Complexity
+                </div>
+                <div class="bg-slate-800/60 p-3 rounded-xl border border-slate-700/50">
+                    <span class="block font-semibold text-indigo-400 mb-1">Web & React</span> DOM, Hooks, JSX
+                </div>
+                <div class="bg-slate-800/60 p-3 rounded-xl border border-slate-700/50">
+                    <span class="block font-semibold text-indigo-400 mb-1">Databases</span> Joins, Subqueries
+                </div>
+            </div>
+            <button onclick="startQuiz()" class="w-full sm:w-auto px-8 py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl shadow-lg shadow-indigo-600/30 transition-all duration-200 cursor-pointer">
+                Start 50-Question Quiz
+            </button>
         </div>
 
-        <div class="row">
-            <span class="label">Longitude</span>
-            <span
-                id="longitude"
-                class="value">
-                —
-            </span>
+        <!-- Quiz View -->
+        <div id="quiz-view" class="hidden space-y-6">
+            <!-- Progress Bar & Counter -->
+            <div class="flex items-center justify-between text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                <span>Question <span id="q-current" class="text-indigo-400">1</span> of 50</span>
+                <span id="q-category" class="bg-indigo-500/10 text-indigo-300 px-2.5 py-1 rounded-full border border-indigo-500/20 normal-case">Java</span>
+            </div>
+            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                <div id="progress-bar" class="bg-indigo-500 h-full transition-all duration-300" style="width: 2%;"></div>
+            </div>
+
+            <!-- Question Card -->
+            <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-xl space-y-6">
+                <h3 id="question-text" class="text-lg sm:text-xl font-medium text-white leading-relaxed">
+                    Question text goes here?
+                </h3>
+
+                <!-- Options -->
+                <div id="options-container" class="space-y-3">
+                    <!-- Options injected dynamically -->
+                </div>
+
+                <!-- Explanation Box -->
+                <div id="explanation-container" class="hidden bg-slate-950/80 border border-slate-800 rounded-xl p-4 text-sm space-y-2">
+                    <div class="font-semibold flex items-center space-x-2" id="explanation-header">
+                        <span id="explanation-icon">💡</span>
+                        <span id="explanation-title" class="text-white">Explanation</span>
+                    </div>
+                    <p id="explanation-text" class="text-slate-400 leading-relaxed"></p>
+                </div>
+
+                <!-- Footer Navigation -->
+                <div class="flex items-center justify-between pt-4 border-t border-slate-800">
+                    <button id="hint-btn" onclick="toggleHint()" class="text-xs text-indigo-400 hover:text-indigo-300 font-medium flex items-center space-x-1 cursor-pointer">
+                        <span>💡 Show Hint</span>
+                    </button>
+                    <button id="next-btn" onclick="handleNext()" class="hidden px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold rounded-xl shadow-md transition-all duration-200 cursor-pointer">
+                        Next Question
+                    </button>
+                </div>
+
+                <!-- Hint Box -->
+                <div id="hint-box" class="hidden bg-indigo-500/10 border border-indigo-500/20 rounded-xl p-3 text-xs text-indigo-300">
+                    <strong>Hint:</strong> <span id="hint-text"></span>
+                </div>
+            </div>
         </div>
 
-        <div class="row">
-            <span class="label">Accuracy</span>
-            <span
-                id="accuracy"
-                class="value">
-                —
-            </span>
+        <!-- Results View -->
+        <div id="results-view" class="hidden bg-slate-900/80 border border-slate-800 rounded-2xl p-8 shadow-2xl text-center space-y-6">
+            <div class="inline-flex p-4 bg-emerald-500/10 text-emerald-400 rounded-2xl text-4xl mb-2">
+                🎉
+            </div>
+            <div class="space-y-2">
+                <h2 class="text-2xl sm:text-3xl font-bold text-white">Quiz Completed!</h2>
+                <p class="text-slate-400">Here is how you performed across all 50 full-stack and CS concepts:</p>
+            </div>
+            <div class="py-6 bg-slate-950/60 rounded-2xl border border-slate-800 max-w-xs mx-auto space-y-1">
+                <div class="text-4xl font-extrabold text-indigo-400" id="final-score">0 / 50</div>
+                <div class="text-xs text-slate-400 uppercase tracking-wider font-semibold">Total Score</div>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                <button onclick="restartQuiz()" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-xl shadow-lg transition-all duration-200 cursor-pointer">
+                    Retake Quiz
+                </button>
+                <button onclick="reviewAnswers()" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold rounded-xl border border-slate-700 transition-all duration-200 cursor-pointer">
+                    Review Answers
+                </button>
+            </div>
         </div>
 
-        <div class="row">
-            <span class="label">Altitude</span>
-            <span
-                id="altitude"
-                class="value">
-                —
-            </span>
-        </div>
+    </main>
 
-        <div class="row">
-            <span class="label">Captured</span>
-            <span
-                id="time"
-                class="value">
-                —
-            </span>
-        </div>
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 bg-slate-900/40 py-4 text-center text-xs text-slate-500">
+        Interactive Full-Stack & CS Mastery Quiz &bull; Built for Comprehensive Assessment
+    </footer>
 
-    </div>
-
-    <div
-        id="saved"
-        class="saved">
-        0 location(s) stored locally
-    </div>
-
-    <div class="note">
-        For best accuracy, keep Location/GPS enabled and use the
-        website over HTTPS. Being outdoors or near a window can
-        improve GPS reception.
-    </div>
-
-</div>
-
-</div>
-
-
-<script>
-
-let watchId = null;
-
-let bestLocation = null;
-
-let bestAccuracy = Infinity;
-
-let searchTimer = null;
-
-
-/* -----------------------------
-   Saved location counter
------------------------------ */
-
-function updateSavedCount() {
-
-    const locations =
-        JSON.parse(
-            localStorage.getItem("offlineLocations") || "[]"
-        );
-
-    document.getElementById("saved").textContent =
-        locations.length +
-        " location(s) stored locally";
-}
-
-
-/* -----------------------------
-   Start GPS search
------------------------------ */
-
-function startLocation() {
-
-    if (!navigator.geolocation) {
-
-        showError(
-            "Your browser does not support location services."
-        );
-
-        return;
-    }
-
-
-    bestLocation = null;
-
-    bestAccuracy = Infinity;
-
-
-    const button =
-        document.getElementById("locationButton");
-
-    const status =
-        document.getElementById("status");
-
-
-    button.disabled = true;
-
-    button.textContent =
-        "Searching GPS...";
-
-
-    status.className = "status";
-
-    status.textContent =
-        "Searching for the most accurate GPS signal...";
-
-
-    document.getElementById(
-        "locationBox"
-    ).style.display = "block";
-
-
-    /*
-     * Start continuous GPS updates
-     */
-
-    watchId =
-        navigator.geolocation.watchPosition(
-
-            locationReceived,
-
-            locationError,
-
+    <script>
+        const quizData = [
+            // Java (1-6)
             {
-                enableHighAccuracy: true,
-
-                maximumAge: 0,
-
-                timeout: 60000
-            }
-        );
-
-
-    /*
-     * Don't search forever.
-     * After 60 seconds save the best result.
-     */
-
-    searchTimer =
-        setTimeout(
-            finishLocation,
-            60000
-        );
-}
-
-
-/* -----------------------------
-   GPS result received
------------------------------ */
-
-function locationReceived(position) {
-
-    const coords =
-        position.coords;
-
-
-    const accuracy =
-        coords.accuracy;
-
-
-    /*
-     * Only accept a better reading
-     */
-
-    if (
-        bestLocation === null ||
-        accuracy < bestAccuracy
-    ) {
-
-        bestAccuracy = accuracy;
-
-
-        bestLocation = {
-
-            latitude:
-                coords.latitude,
-
-            longitude:
-                coords.longitude,
-
-            accuracy:
-                accuracy,
-
-            altitude:
-                coords.altitude,
-
-            altitudeAccuracy:
-                coords.altitudeAccuracy,
-
-            heading:
-                coords.heading,
-
-            speed:
-                coords.speed,
-
-            timestamp:
-                new Date().toISOString()
-        };
-
-
-        displayLocation(
-            bestLocation
-        );
-
-
-        updateStatus(
-            accuracy
-        );
-
-
-        /*
-         * If GPS reaches 10 meters
-         * or better, finish.
-         */
-
-        if (accuracy <= 10) {
-
-            finishLocation();
-        }
-    }
-}
-
-
-/* -----------------------------
-   Display GPS data
------------------------------ */
-
-function displayLocation(location) {
-
-    document.getElementById(
-        "latitude"
-    ).textContent =
-        location.latitude.toFixed(7);
-
-
-    document.getElementById(
-        "longitude"
-    ).textContent =
-        location.longitude.toFixed(7);
-
-
-    /*
-     * Accuracy
-     */
-
-    const accuracyElement =
-        document.getElementById(
-            "accuracy"
-        );
-
-
-    accuracyElement.textContent =
-        location.accuracy.toFixed(1) +
-        " meters";
-
-
-    accuracyElement.className =
-        "value";
-
-
-    if (location.accuracy <= 10) {
-
-        accuracyElement.classList.add(
-            "accuracy-good"
-        );
-
-    } else if (location.accuracy <= 30) {
-
-        accuracyElement.classList.add(
-            "accuracy-medium"
-        );
-
-    } else {
-
-        accuracyElement.classList.add(
-            "accuracy-poor"
-        );
-    }
-
-
-    /*
-     * Altitude
-     */
-
-    if (
-        location.altitude !== null &&
-        location.altitude !== undefined
-    ) {
-
-        document.getElementById(
-            "altitude"
-        ).textContent =
-            location.altitude.toFixed(1) +
-            " m";
-
-    } else {
-
-        document.getElementById(
-            "altitude"
-        ).textContent =
-            "Not available";
-    }
-
-
-    /*
-     * Time
-     */
-
-    document.getElementById(
-        "time"
-    ).textContent =
-        new Date(
-            location.timestamp
-        ).toLocaleString();
-}
-
-
-/* -----------------------------
-   Status while searching
------------------------------ */
-
-function updateStatus(accuracy) {
-
-    const status =
-        document.getElementById(
-            "status"
-        );
-
-
-    if (accuracy <= 10) {
-
-        status.textContent =
-            "Excellent GPS accuracy: " +
-            accuracy.toFixed(1) +
-            " meters";
-
-    } else if (accuracy <= 30) {
-
-        status.textContent =
-            "Good GPS accuracy: " +
-            accuracy.toFixed(1) +
-            " meters. Searching for better...";
-
-    } else {
-
-        status.textContent =
-            "Current accuracy: " +
-            accuracy.toFixed(1) +
-            " meters. Waiting for a better GPS fix...";
-    }
-}
-
-
-/* -----------------------------
-   Finish and save
------------------------------ */
-
-function finishLocation() {
-
-    /*
-     * Stop timer
-     */
-
-    if (searchTimer !== null) {
-
-        clearTimeout(
-            searchTimer
-        );
-
-        searchTimer = null;
-    }
-
-
-    /*
+                category: "Java",
+                question: "Which of the following loops guarantees that the loop body executes at least once in Java?",
+                options: [
+                    { text: "for loop", isCorrect: false, rationale: "A standard for loop checks the condition before execution, so it may run zero times." },
+                    { text: "while loop", isCorrect: false, rationale: "A while loop evaluates the condition upfront, potentially running zero times." },
+                    { text: "do-while loop", isCorrect: true, rationale: "A do-while loop evaluates its condition at the end of the block, ensuring at least one execution." },
+                    { text: "foreach loop", isCorrect: false, rationale: "A foreach loop skips execution entirely if the target collection or array is empty." }
+                ],
+                hint: "Look for the loop construct that checks its continuation condition at the bottom of the loop block."
+            },
+            {
+                category: "Java",
+                question: "What is the default value of an uninitialized object reference instance variable in a Java class?",
+                options: [
+                    { text: "0", isCorrect: false, rationale: "0 is the default value for numeric primitive types like int, short, and byte." },
+                    { text: "false", isCorrect: false, rationale: "false is the default value for the boolean primitive type." },
+                    { text: "null", isCorrect: true, rationale: "Uninitialized object reference instance variables default to null in Java." },
+                    { text: "undefined", isCorrect: false, rationale: "'undefined' is a JavaScript concept and does not exist as a keyword or default value in Java." }
+                ],
+                hint: "Reference variables do not hold primitive values; they point to objects in memory."
+            },
+            {
+                category: "Java",
+                question: "Which method is used to compare the actual contents of two String objects for equality in Java rather than their memory references?",
+                options: [
+                    { text: "== operator", isCorrect: false, rationale: "The == operator checks whether two reference variables point to the exact same object in memory." },
+                    { text: "equals() method", isCorrect: true, rationale: "The equals() method is overridden in the String class to compare character sequences value by value." },
+                    { text: "compareTo() method", isCorrect: false, rationale: "compareTo() returns an integer representing lexicographical ordering, not a strict boolean equality check." },
+                    { text: "match() method", isCorrect: false, rationale: "match() is not a standard string equality method in Java." }
+                ],
+                hint: "Think about the method provided by the Object class and overridden by String to check logical equality."
+            },
+            {
+                category: "Java",
+                question: "What happens when you attempt to modify a String object using methods like `concat()` or `toUpperCase()` without reassigning it?",
+                options: [
+                    { text: "The original string is modified in-place.", isCorrect: false, rationale: "Java Strings are immutable; they cannot be changed after creation." },
+                    { text: "A compilation error occurs.", isCorrect: false, rationale: "Calling methods on immutable strings is syntactically valid." },
+                    { text: "The original string remains unchanged because strings are immutable.", isCorrect: true, rationale: "Because strings are immutable, modification methods return a new string instance while leaving the original intact." },
+                    { text: "A runtime NullPointerException is thrown.", isCorrect: false, rationale: "No exception is thrown unless the reference itself is null." }
+                ],
+                hint: "Recall the core characteristic of Java's String class: immutability."
+            },
+            {
+                category: "Java",
+                question: "Which Object-Oriented principle is demonstrated when a subclass provides a specific implementation of a method that is already defined in its parent class?",
+                options: [
+                    { text: "Method Overloading", isCorrect: false, rationale: "Method overloading occurs within the same class with different parameter signatures." },
+                    { text: "Method Overriding", isCorrect: true, rationale: "Method overriding allows a subclass to provide a specific implementation of a superclass method." },
+                    { text: "Encapsulation", isCorrect: false, rationale: "Encapsulation refers to bundling data and methods into a single unit and restricting direct access." },
+                    { text: "Abstraction", isCorrect: false, rationale: "Abstraction hides implementation details using abstract classes or interfaces." }
+                ],
+                hint: "This polymorphism mechanism happens across inheritance hierarchies with identical method signatures."
+            },
+            {
+                category: "Java",
+                question: "What is the primary purpose of encapsulation in OOP?",
+                options: [
+                    { text: "To execute multiple threads concurrently", isCorrect: false, rationale: "Concurrency is handled via multithreading and the Thread class or Runnable interface." },
+                    { text: "To hide internal object state and restrict direct access using access modifiers", isCorrect: true, rationale: "Encapsulation protects object integrity by restricting direct field access and exposing controlled getter/setter methods." },
+                    { text: "To allow multiple classes to inherit from a single parent class", isCorrect: false, rationale: "Multiple inheritance of state is handled through interfaces or multi-level hierarchies." },
+                    { text: "To speed up runtime execution speed", isCorrect: false, rationale: "Encapsulation is a design principle for maintainability, not a direct performance optimization." }
+                ],
+                hint: "Think about private fields combined with public getters and setters."
+            },
+
+            // Basic DSA & Coding Logic (7-12)
+            {
+                category: "DSA & Logic",
+                question: "What is the worst-case time complexity of searching for an element in a balanced Binary Search Tree (BST) containing $N$ nodes?",
+                options: [
+                    { text: "$O(1)$", isCorrect: false, rationale: "O(1) represents constant time, typical of hash table lookups." },
+                    { text: "$O(\\log N)$", isCorrect: true, rationale: "In a balanced BST, search operations divide the search space in half at each step, yielding logarithmic time." },
+                    { text: "$O(N)$", isCorrect: false, rationale: "O(N) is the worst-case time for linear search or an unbalanced skewed tree." },
+                    { text: "$O(N \\log N)$", isCorrect: false, rationale: "O(N log N) is typical of efficient sorting algorithms like Merge Sort." }
+                ],
+                hint: "A balanced tree maintains logarithmic height relative to the number of nodes."
+            },
+            {
+                category: "DSA & Logic",
+                question: "Which data structure operates on a Last-In, First-Out (LIFO) principle?",
+                options: [
+                    { text: "Queue", isCorrect: false, rationale: "A queue operates on a First-In, First-Out (FIFO) principle." },
+                    { text: "Stack", isCorrect: true, rationale: "A stack pushes and pops elements from the same end, following LIFO." },
+                    { text: "Max-Heap", isCorrect: false, rationale: "A heap is a specialized tree-based data structure satisfying the heap property." },
+                    { text: "Linked List", isCorrect: false, rationale: "A linked list is a linear collection of nodes pointing sequentially to one another." }
+                ],
+                hint: "Think of a stack of plates where you add and remove from the very top."
+            },
+            {
+                category: "DSA & Logic",
+                question: "What is the time complexity of accessing an element by its index in a static array?",
+                options: [
+                    { text: "$O(1)$", isCorrect: true, rationale: "Arrays allow direct memory access via index calculation in constant time." },
+                    { text: "$O(\\log N)$", isCorrect: false, rationale: "Logarithmic time is characteristic of binary search on sorted data." },
+                    { text: "$O(N)$", isCorrect: false, rationale: "Linear time is required when searching unsorted arrays or linked lists." },
+                    { text: "$O(N^2)$", isCorrect: false, rationale: "Quadratic time is typical of nested loops comparing all pairs." }
+                ],
+                hint: "Because elements are stored contiguously in memory, index calculation takes constant time."
+            },
+            {
+                category: "DSA & Logic",
+                question: "Which sorting algorithm consistently achieves $O(N \\log N)$ time complexity in the worst, average, and best cases while dividing the array?",
+                options: [
+                    { text: "Quick Sort", isCorrect: false, rationale: "Quick Sort has a worst-case time complexity of $O(N^2)$ when poorly partitioned." },
+                    { text: "Bubble Sort", isCorrect: false, rationale: "Bubble Sort operates in $O(N^2)$ time in average and worst cases." },
+                    { text: "Merge Sort", isCorrect: true, rationale: "Merge Sort strictly divides the array in half and merges sorted halves, guaranteeing $O(N \\log N)$ across all cases." },
+                    { text: "Selection Sort", isCorrect: false, rationale: "Selection Sort runs in $O(N^2)$ time regardless of initial ordering." }
+                ],
+                hint: "This divide-and-conquer algorithm always splits the array into two equal halves."
+            },
+            {
+                category: "DSA & Logic",
+                question: "What is the primary advantage of a doubly linked list over a singly linked list?",
+                options: [
+                    { text: "It uses less memory per node.", isCorrect: false, rationale: "Doubly linked lists require extra memory for a previous pointer in each node." },
+                    { text: "It allows traversal in both forward and backward directions.", isCorrect: true, rationale: "Each node in a doubly linked list contains both next and previous pointers, enabling bidirectional traversal." },
+                    { text: "It provides $O(1)$ random index access.", isCorrect: false, rationale: "Linked lists never provide $O(1)$ random access by index." },
+                    { text: "It prevents memory leaks automatically.", isCorrect: false, rationale: "Memory management depends on language runtimes like garbage collection." }
+                ],
+                hint: "Look for bidirectional traversal capabilities."
+            },
+            {
+                category: "DSA & Logic",
+                question: "Which graph traversal algorithm uses a   /*
      * Stop GPS watcher
      */
 
